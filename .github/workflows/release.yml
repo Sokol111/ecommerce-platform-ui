@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - package.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  ci:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/nuxt-ci.yml@master
+    with:
+      node-version: '22'
+
+  release:
+    needs: ci
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/nuxt-release.yml@master
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+  deploy:
+    needs: release
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/deploy.yml@master
+    with:
+      image_tag: ${{ needs.release.outputs.image_tag }}
+    secrets:
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
