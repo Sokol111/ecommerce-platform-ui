@@ -13,8 +13,16 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    tenantApiUrl: 'http://localhost:8080',
+    authApiUrl: 'http://localhost:8081',
+    platformServiceToken: '',
+    cookieSecure: false,
+    cookieDomain: ''
+  },
+
   routeRules: {
-    '/': { prerender: true }
+    '/register': { ssr: true }
   },
 
   compatibilityDate: '2025-01-15',

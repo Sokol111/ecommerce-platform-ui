@@ -11,8 +11,8 @@ useHead({
   }
 })
 
-const title = 'Ecommerce Platform UI'
-const description = 'Internal platform interface for ecommerce services.'
+const title = 'Ecommerce Platform'
+const description = 'Platform for managing tenants and registration.'
 
 useSeoMeta({
   title,
@@ -24,7 +24,8 @@ useSeoMeta({
 
 <template>
   <UApp>
-    <NuxtLoadingIndicator />
-    <NuxtPage />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </UApp>
 </template>

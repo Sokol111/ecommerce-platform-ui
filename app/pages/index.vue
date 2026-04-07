@@ -1,21 +1,32 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: 'auth'
+})
+</script>
+
 <template>
-  <UContainer class="flex min-h-screen items-center py-16 sm:py-24">
-    <div class="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-      <UBadge
-        label="Platform UI"
-        color="neutral"
-        variant="subtle"
+  <UCard class="w-full max-w-lg">
+    <div class="flex flex-col items-center gap-6 text-center py-4">
+      <UIcon
+        name="i-lucide-store"
+        class="text-primary size-12"
       />
-
-      <div class="space-y-3">
-        <h1 class="text-4xl font-semibold tracking-tight text-highlighted sm:text-5xl">
-          Ecommerce Platform UI
+      <div class="space-y-2">
+        <h1 class="text-3xl font-bold tracking-tight">
+          Ecommerce Platform
         </h1>
-
-        <p class="text-base leading-7 text-muted sm:text-lg">
-          Nuxt baseline is ready. Replace this placeholder with the first platform workflows.
+        <p class="text-muted text-base">
+          Create and manage your online stores
         </p>
       </div>
+
+      <UButton
+        to="/register"
+        size="lg"
+        block
+      >
+        Create your shop
+      </UButton>
     </div>
-  </UContainer>
+  </UCard>
 </template>
