@@ -1,6 +1,7 @@
-import type { H3Event } from 'h3'
+import type { CreateTenantRequest, TenantResponse } from '@sokol111/ecommerce-tenant-service-api'
+import { getCreateTenantUrl } from '@sokol111/ecommerce-tenant-service-api'
 
-export function useTenantClient(event: H3Event) {
+export function useTenantClient() {
   const { tenantApiUrl: baseURL, platformServiceToken } = useRuntimeConfig()
 
   const headers: Record<string, string> = {}
@@ -10,11 +11,11 @@ export function useTenantClient(event: H3Event) {
 
   return {
     async createTenant(slug: string, name: string) {
-      return $fetch<{ id: string, slug: string, name: string }>('/v1/tenant/create', {
+      return $fetch<TenantResponse>(getCreateTenantUrl(), {
         baseURL,
         method: 'POST',
         headers,
-        body: { slug, name }
+        body: { slug, name } satisfies CreateTenantRequest
       })
     }
   }

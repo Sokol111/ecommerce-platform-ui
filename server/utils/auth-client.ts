@@ -1,6 +1,7 @@
-import type { H3Event } from 'h3'
+import type { AdminAuthResponse, AdminUserCreateRequest, AdminUserResponse } from '@sokol111/ecommerce-auth-service-api'
+import { getAdminLoginUrl, getAdminUserCreateUrl } from '@sokol111/ecommerce-auth-service-api'
 
-export function useAuthClient(_event: H3Event) {
+export function useAuthClient() {
   const { authApiUrl: baseURL, platformServiceToken } = useRuntimeConfig()
 
   const headers: Record<string, string> = {}
@@ -9,14 +10,8 @@ export function useAuthClient(_event: H3Event) {
   }
 
   return {
-    async createUser(tenantSlug: string, body: {
-      email: string
-      password: string
-      firstName: string
-      lastName: string
-      role: string
-    }) {
-      return $fetch<{ id: string }>('/v1/admin/users/create', {
+    async createUser(tenantSlug: string, body: AdminUserCreateRequest) {
+      return $fetch<AdminUserResponse>(getAdminUserCreateUrl(), {
         baseURL,
         method: 'POST',
         headers: {
@@ -28,14 +23,7 @@ export function useAuthClient(_event: H3Event) {
     },
 
     async login(tenantSlug: string, email: string, password: string) {
-      return $fetch<{
-        accessToken: string
-        refreshToken: string
-        expiresIn: number
-        expiresAt: string
-        refreshExpiresIn: number
-        refreshExpiresAt: string
-      }>('/v1/admin/login', {
+      return $fetch<AdminAuthResponse>(getAdminLoginUrl(), {
         baseURL,
         method: 'POST',
         headers: {

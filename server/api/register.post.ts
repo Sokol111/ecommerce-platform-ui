@@ -17,8 +17,8 @@ interface RegisterBody {
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event)
-  const tenantClient = useTenantClient(event)
-  const authClient = useAuthClient(event)
+  const tenantClient = useTenantClient()
+  const authClient = useAuthClient()
 
   await createTenant(tenantClient, body)
   await createAdminUser(authClient, body)
