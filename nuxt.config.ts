@@ -22,7 +22,9 @@ export default defineNuxtConfig({
 
     // Cookie settings (override with NUXT_COOKIE_SECURE=false for local dev)
     cookieSecure: true,
-    cookieDomain: ''
+
+    // Base domain for building tenant URLs (e.g. ".sokolshop.com")
+    baseDomain: ''
   },
 
   routeRules: {

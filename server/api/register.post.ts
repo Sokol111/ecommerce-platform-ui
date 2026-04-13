@@ -96,7 +96,9 @@ async function createAdminUser(client: ReturnType<typeof useAuthClient>, body: R
 }
 
 function buildAdminUrl(slug: string): string {
-  const { cookieDomain } = useRuntimeConfig()
-  const adminDomain = cookieDomain ? `${slug}.admin${cookieDomain}` : `${slug}.admin.localhost:3001`
-  return `http://${adminDomain}`
+  const { baseDomain } = useRuntimeConfig()
+  if (baseDomain) {
+    return `http://${slug}.admin${baseDomain}`
+  }
+  return `http://${slug}.admin.localhost:3001`
 }
