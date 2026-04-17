@@ -3,9 +3,6 @@ import type { H3Event } from 'h3'
 
 const logger = consola.withTag('api:register')
 
-const MAX_RETRIES = 5
-const RETRY_DELAY_MS = 1000
-
 interface RegisterBody {
   shopName: string
   slug: string
@@ -18,14 +15,14 @@ interface RegisterBody {
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event)
   const tenantClient = useTenantClient()
-  const authClient = useAuthClient()
+  const zitadel = useZitadelClient()
 
   await createTenant(tenantClient, body)
-  await createAdminUser(authClient, body)
+  await createAdminUser(zitadel, body)
 
   return {
     slug: body.slug,
-    adminUrl: buildAdminUrl(body.slug)
+    adminUrl: buildAdminUrl()
   }
 })
 
@@ -62,43 +59,29 @@ async function createTenant(client: ReturnType<typeof useTenantClient>, body: Re
   }
 }
 
-async function createAdminUser(client: ReturnType<typeof useAuthClient>, body: RegisterBody) {
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      await client.createUser(body.slug, {
-        email: body.email,
-        password: body.password,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        role: 'super_admin'
-      })
-      logger.info(`Admin user created for tenant: ${body.slug}`)
-      return
-    } catch (error: unknown) {
-      const err = error as { response?: { status?: number } }
-      if (err.response?.status === 503 && attempt < MAX_RETRIES) {
-        logger.warn(`Auth service not ready for ${body.slug}, retry ${attempt}/${MAX_RETRIES}`)
-        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS))
-        continue
-      }
-      logger.error(`Failed to create admin user for ${body.slug}`, error)
-      throw createError({
-        statusCode: 500,
-        message: 'Shop created but failed to set up your account. Please contact support.'
-      })
-    }
-  }
+async function createAdminUser(zitadel: ReturnType<typeof useZitadelClient>, body: RegisterBody) {
+  try {
+    const userId = await zitadel.createUser({
+      email: body.email,
+      password: body.password,
+      firstName: body.firstName,
+      lastName: body.lastName,
+      tenantSlug: body.slug
+    })
+    logger.info(`User created in Zitadel: ${userId}`)
 
-  throw createError({
-    statusCode: 503,
-    message: 'Shop is being set up. Please try signing in shortly.'
-  })
+    await zitadel.grantRole(userId, 'super_admin')
+    logger.info(`Granted super_admin role for tenant: ${body.slug}`)
+  } catch (error: unknown) {
+    logger.error(`Failed to create admin user for ${body.slug}`, error)
+    throw createError({
+      statusCode: 500,
+      message: 'Shop created but failed to set up your account. Please contact support.'
+    })
+  }
 }
 
-function buildAdminUrl(slug: string): string {
+function buildAdminUrl(): string {
   const { baseDomain } = useRuntimeConfig()
-  if (baseDomain) {
-    return `http://${slug}.admin${baseDomain}`
-  }
-  return `http://${slug}.admin.localhost:3001`
+  return `http://admin${baseDomain}`
 }

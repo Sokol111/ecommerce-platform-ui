@@ -9,15 +9,14 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
-    "link:local": "pnpm link ../ecommerce-tenant-service-api/gen/typescript ../ecommerce-auth-service-api/gen/typescript",
-    "unlink:local": "rm -f node_modules/@sokol111/ecommerce-tenant-service-api node_modules/@sokol111/ecommerce-auth-service-api && pnpm install"
+    "link:local": "pnpm link ../ecommerce-tenant-service-api/gen/typescript",
+    "unlink:local": "rm -f node_modules/@sokol111/ecommerce-tenant-service-api && pnpm install"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.100",
     "@iconify-json/simple-icons": "^1.2.75",
     "@nuxt/ui": "^4.6.0",
     "@pinia/nuxt": "0.11.3",
-    "@sokol111/ecommerce-auth-service-api": "1.1.5",
     "@sokol111/ecommerce-tenant-service-api": "0.0.6",
     "@vueuse/nuxt": "14.2.1",
     "nuxt": "^4.4.2",
@@ -31,5 +30,5 @@
     "vue-tsc": "^3.2.6"
   },
   "packageManager": "pnpm@10.33.0",
-  "version": "0.0.3"
+  "version": "0.0.4"
 }
