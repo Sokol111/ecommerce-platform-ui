@@ -1,23 +1,12 @@
-import { importPKCS8, SignJWT } from 'jose'
-
 interface TokenCache {
   token: string
   expiresAt: number
 }
 
 let tokenCache: TokenCache | null = null
-let privateKey: CryptoKey | null = null
-
-async function getPrivateKey(): Promise<CryptoKey> {
-  if (privateKey) return privateKey
-  const { zitadelPrivateKey } = useRuntimeConfig()
-  privateKey = await importPKCS8(zitadelPrivateKey, 'RS256')
-  return privateKey
-}
 
 /**
- * Get an access token for Zitadel APIs via private_key_jwt (RFC 7523).
- * Signs a JWT client assertion with the RSA private key.
+ * Get an access token for Zitadel APIs via client_credentials grant.
  * Cached until 30s before expiry.
  */
 export async function getS2SToken(): Promise<string> {
@@ -25,31 +14,19 @@ export async function getS2SToken(): Promise<string> {
     return tokenCache.token
   }
 
-  const { zitadelUrl, zitadelClientId } = useRuntimeConfig()
+  const { zitadelUrl, zitadelClientId, zitadelClientSecret } = useRuntimeConfig()
   const tokenUrl = `${zitadelUrl}/oauth/v2/token`
-  const key = await getPrivateKey()
-
-  const assertion = await new SignJWT({})
-    .setProtectedHeader({ alg: 'RS256' })
-    .setIssuer(zitadelClientId)
-    .setSubject(zitadelClientId)
-    .setAudience(tokenUrl)
-    .setIssuedAt()
-    .setExpirationTime('5m')
-    .setJti(crypto.randomUUID())
-    .sign(key)
 
   const params = new URLSearchParams({
     grant_type: 'client_credentials',
-    client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-    client_assertion: assertion,
+    client_id: zitadelClientId,
+    client_secret: zitadelClientSecret,
     scope: 'openid urn:zitadel:iam:org:project:id:zitadel:aud'
   })
 
   const resp = await $fetch<{ access_token: string, expires_in: number }>(
-    '/oauth/v2/token',
+    tokenUrl,
     {
-      baseURL: zitadelUrl,
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params.toString()
@@ -72,7 +49,7 @@ function authHeaders(token: string) {
 }
 
 export function useZitadelClient() {
-  const { zitadelUrl, zitadelProjectId } = useRuntimeConfig()
+  const { zitadelUrl, zitadelProjectId, zitadelOrgId } = useRuntimeConfig()
 
   return {
     async createUser(opts: {
@@ -84,26 +61,24 @@ export function useZitadelClient() {
     }) {
       const token = await getS2SToken()
 
-      // Create user with tenant metadata in a single call.
-      const resp = await $fetch<{ id: string }>('/v2/users/new', {
+      // Create user with tenant metadata via AddHumanUser.
+      const resp = await $fetch<{ userId: string }>('/v2/users/human', {
         baseURL: zitadelUrl,
         method: 'POST',
         headers: authHeaders(token),
         body: {
           username: opts.email,
-          human: {
-            profile: {
-              givenName: opts.firstName,
-              familyName: opts.lastName
-            },
-            email: {
-              email: opts.email,
-              isVerified: true
-            },
-            password: {
-              password: opts.password,
-              changeRequired: false
-            }
+          profile: {
+            givenName: opts.firstName,
+            familyName: opts.lastName
+          },
+          email: {
+            email: opts.email,
+            isVerified: true
+          },
+          password: {
+            password: opts.password,
+            changeRequired: false
           },
           metadata: [
             {
@@ -114,7 +89,7 @@ export function useZitadelClient() {
         }
       })
 
-      return resp.id
+      return resp.userId
     },
 
     async grantRole(userId: string, role: string) {
@@ -130,6 +105,7 @@ export function useZitadelClient() {
         body: {
           userId,
           projectId: zitadelProjectId,
+          organizationId: zitadelOrgId,
           roleKeys: [role]
         }
       })
