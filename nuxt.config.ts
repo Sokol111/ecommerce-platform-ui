@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     tenantApiUrl: '',
     zitadelUrl: '',
     zitadelClientId: '',
-    zitadelClientSecret: '',
+    zitadelPrivateKey: '',
     zitadelProjectId: '',
 
     // Cookie settings (override with NUXT_COOKIE_SECURE=false for local dev)

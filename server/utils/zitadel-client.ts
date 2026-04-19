@@ -1,12 +1,23 @@
+import { importPKCS8, SignJWT } from 'jose'
+
 interface TokenCache {
   token: string
   expiresAt: number
 }
 
 let tokenCache: TokenCache | null = null
+let privateKey: CryptoKey | null = null
+
+async function getPrivateKey(): Promise<CryptoKey> {
+  if (privateKey) return privateKey
+  const { zitadelPrivateKey } = useRuntimeConfig()
+  privateKey = await importPKCS8(zitadelPrivateKey, 'RS256')
+  return privateKey
+}
 
 /**
- * Get an access token for Zitadel APIs via client_credentials grant.
+ * Get an access token for Zitadel APIs via private_key_jwt (RFC 7523).
+ * Signs a JWT client assertion with the RSA private key.
  * Cached until 30s before expiry.
  */
 export async function getS2SToken(): Promise<string> {
@@ -14,12 +25,24 @@ export async function getS2SToken(): Promise<string> {
     return tokenCache.token
   }
 
-  const { zitadelUrl, zitadelClientId, zitadelClientSecret } = useRuntimeConfig()
+  const { zitadelUrl, zitadelClientId } = useRuntimeConfig()
+  const tokenUrl = `${zitadelUrl}/oauth/v2/token`
+  const key = await getPrivateKey()
+
+  const assertion = await new SignJWT({})
+    .setProtectedHeader({ alg: 'RS256' })
+    .setIssuer(zitadelClientId)
+    .setSubject(zitadelClientId)
+    .setAudience(tokenUrl)
+    .setIssuedAt()
+    .setExpirationTime('5m')
+    .setJti(crypto.randomUUID())
+    .sign(key)
 
   const params = new URLSearchParams({
     grant_type: 'client_credentials',
-    client_id: zitadelClientId,
-    client_secret: zitadelClientSecret,
+    client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+    client_assertion: assertion,
     scope: 'openid urn:zitadel:iam:org:project:id:zitadel:aud'
   })
 
