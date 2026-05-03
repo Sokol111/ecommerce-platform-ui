@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     // Values are set from .env: NUXT_TENANT_API_URL, NUXT_ZITADEL_URL, etc.
     tenantApiUrl: '',
     zitadelUrl: '',
+    zitadelDomain: '',
     zitadelClientId: '',
     zitadelClientSecret: '',
     zitadelProjectId: '',

@@ -9,6 +9,21 @@ let tokenCache: TokenCache | null = null
  * Get an access token for Zitadel APIs via client_credentials grant.
  * Cached until 30s before expiry.
  */
+/**
+ * Build headers with Host override for Zitadel instance resolution.
+ * When the internal URL (e.g. http://zitadel-api:8080) differs from the
+ * external domain (e.g. localhost), Zitadel needs the Host header to match
+ * the registered instance domain.
+ */
+function zitadelHeaders(extra?: Record<string, string>): Record<string, string> {
+  const { zitadelDomain } = useRuntimeConfig()
+  const headers: Record<string, string> = { ...extra }
+  if (zitadelDomain) {
+    headers['Host'] = zitadelDomain
+  }
+  return headers
+}
+
 export async function getS2SToken(): Promise<string> {
   if (tokenCache && Date.now() < tokenCache.expiresAt) {
     return tokenCache.token
@@ -28,7 +43,7 @@ export async function getS2SToken(): Promise<string> {
     tokenUrl,
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: zitadelHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
       body: params.toString()
     }
   )
@@ -42,10 +57,10 @@ export async function getS2SToken(): Promise<string> {
 }
 
 function authHeaders(token: string) {
-  return {
+  return zitadelHeaders({
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json'
-  }
+  })
 }
 
 export function useZitadelClient() {
