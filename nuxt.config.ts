@@ -15,14 +15,12 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Server-only (not exposed to client)
-    // Values are set from .env: NUXT_TENANT_API_URL, NUXT_ZITADEL_URL, etc.
+    // Values are set from .env: NUXT_TENANT_API_URL, NUXT_LOGTO_URL, etc.
     tenantApiUrl: '',
-    zitadelUrl: '',
-    zitadelDomain: '',
-    zitadelClientId: '',
-    zitadelClientSecret: '',
-    zitadelProjectId: '',
-    zitadelOrgId: '',
+    logtoUrl: '',
+    logtoClientId: '',
+    logtoClientSecret: '',
+    apiResourceIndicator: '',
 
     // Cookie settings (override with NUXT_COOKIE_SECURE=false for local dev)
     cookieSecure: true,

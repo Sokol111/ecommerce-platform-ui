@@ -14,6 +14,24 @@ export function useTenantClient() {
         headers: { Authorization: `Bearer ${token}` },
         body: { slug, name } satisfies CreateTenantRequest
       })
+    },
+
+    async registerTenant(body: {
+      slug: string
+      name: string
+      email: string
+      password: string
+      firstName: string
+      lastName: string
+    }) {
+      const token = await getS2SToken()
+
+      return $fetch<TenantResponse>('/v1/tenant/register', {
+        baseURL,
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body
+      })
     }
   }
 }
