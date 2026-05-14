@@ -17,7 +17,7 @@
     "@iconify-json/simple-icons": "^1.2.75",
     "@nuxt/ui": "^4.6.0",
     "@pinia/nuxt": "0.11.3",
-    "@sokol111/ecommerce-tenant-service-api": "0.0.6",
+    "@sokol111/ecommerce-tenant-service-api": "0.1.0",
     "@vueuse/nuxt": "14.2.1",
     "nuxt": "^4.4.2",
     "tailwindcss": "^4.2.2",

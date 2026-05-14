@@ -1,5 +1,10 @@
-import type { CreateTenantRequest, TenantResponse } from '@sokol111/ecommerce-tenant-service-api'
-import { getCreateTenantUrl } from '@sokol111/ecommerce-tenant-service-api'
+import type {
+  CreateTenantRequest,
+  RegisterTenantRequest,
+  RegistrationStatusResponse,
+  TenantResponse
+} from '@sokol111/ecommerce-tenant-service-api'
+import { getCreateTenantUrl, getGetRegistrationStatusUrl, getRegisterTenantUrl } from '@sokol111/ecommerce-tenant-service-api'
 
 export function useTenantClient() {
   const { tenantApiUrl: baseURL } = useRuntimeConfig()
@@ -16,21 +21,24 @@ export function useTenantClient() {
       })
     },
 
-    async registerTenant(body: {
-      slug: string
-      name: string
-      email: string
-      password: string
-      firstName: string
-      lastName: string
-    }) {
+    async registerTenant(body: RegisterTenantRequest) {
       const token = await getS2SToken()
 
-      return $fetch<TenantResponse>('/v1/tenant/register', {
+      return $fetch.raw(getRegisterTenantUrl(), {
         baseURL,
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body
+      })
+    },
+
+    async getRegistrationStatus(slug: string) {
+      const token = await getS2SToken()
+
+      return $fetch<RegistrationStatusResponse>(getGetRegistrationStatusUrl(slug), {
+        baseURL,
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
       })
     }
   }
