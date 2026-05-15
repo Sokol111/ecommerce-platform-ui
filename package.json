@@ -9,8 +9,7 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
-    "link:local": "pnpm link ../ecommerce-tenant-service-api/gen/typescript",
-    "unlink:local": "rm -f node_modules/@sokol111/ecommerce-tenant-service-api && pnpm install"
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.100",
