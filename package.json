@@ -8,27 +8,26 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "typecheck": "nuxt typecheck",
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.100",
-    "@iconify-json/simple-icons": "^1.2.75",
-    "@nuxt/ui": "^4.6.0",
+    "@iconify-json/lucide": "^1.2.108",
+    "@iconify-json/simple-icons": "^1.2.83",
+    "@nuxt/ui": "^4.7.1",
     "@pinia/nuxt": "0.11.3",
-    "@sokol111/ecommerce-tenant-service-api": "0.1.0",
-    "@vueuse/nuxt": "14.2.1",
-    "nuxt": "^4.4.2",
-    "tailwindcss": "^4.2.2",
-    "zod": "^3.25.76"
+    "@sokol111/ecommerce-tenant-service-api": "link:../ecommerce-tenant-service-api/gen/typescript",
+    "@vueuse/nuxt": "14.3.0",
+    "nuxt": "^4.4.6",
+    "tailwindcss": "^4.3.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
-    "@types/node": "^25.6.0",
-    "eslint": "^10.1.0",
-    "typescript": "^6.0.2",
-    "vue-tsc": "^3.2.6"
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.0",
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.1"
   },
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.2.2",
   "version": "0.0.6"
 }
