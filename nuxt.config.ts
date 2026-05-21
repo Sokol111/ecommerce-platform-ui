@@ -40,6 +40,14 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-15',
 
   vite: {
+    optimizeDeps: {
+      include: [
+        'vue',
+        'vue-router',
+        '@vueuse/core',
+        'zod'
+      ]
+    },
     server: {
       allowedHosts: true
     }
