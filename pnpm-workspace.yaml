@@ -9,5 +9,4 @@ ignoredBuiltDependencies:
   - esbuild
   - unrs-resolver
   - vue-demi
-overrides:
-  '@sokol111/ecommerce-tenant-service-api': link:../ecommerce-tenant-service-api/gen/typescript
+

@@ -8,14 +8,16 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "link:local": "pnpm link ../ecommerce-tenant-service-api/gen/typescript",
+    "unlink:local": "rm -f node_modules/@sokol111/ecommerce-tenant-service-api && pnpm install"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.108",
     "@iconify-json/simple-icons": "^1.2.83",
     "@nuxt/ui": "^4.7.1",
     "@pinia/nuxt": "0.11.3",
-    "@sokol111/ecommerce-tenant-service-api": "link:../ecommerce-tenant-service-api/gen/typescript",
+    "@sokol111/ecommerce-tenant-service-api": "^0.1.3",
     "@vueuse/nuxt": "14.3.0",
     "nuxt": "^4.4.6",
     "tailwindcss": "^4.3.0",
