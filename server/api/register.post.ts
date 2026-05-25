@@ -117,7 +117,7 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function buildAdminUrl(slug: string): string {
+function buildAdminUrl(_slug: string): string {
   const { baseDomain } = useRuntimeConfig()
-  return `http://${slug}.admin${baseDomain}`
+  return `http://admin${baseDomain}`
 }
