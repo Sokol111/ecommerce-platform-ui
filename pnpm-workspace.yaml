@@ -9,4 +9,5 @@ ignoredBuiltDependencies:
   - esbuild
   - unrs-resolver
   - vue-demi
-
+minimumReleaseAgeExclude:
+  - '@sokol111/ecommerce-tenant-service-api@0.1.4'

@@ -17,7 +17,7 @@
     "@iconify-json/simple-icons": "^1.2.83",
     "@nuxt/ui": "^4.7.1",
     "@pinia/nuxt": "0.11.3",
-    "@sokol111/ecommerce-tenant-service-api": "^0.1.3",
+    "@sokol111/ecommerce-tenant-service-api": "^0.1.4",
     "@vueuse/nuxt": "14.3.0",
     "nuxt": "^4.4.6",
     "tailwindcss": "^4.3.0",
@@ -31,5 +31,5 @@
     "vue-tsc": "^3.3.1"
   },
   "packageManager": "pnpm@11.2.2",
-  "version": "0.0.6"
+  "version": "1.0.0"
 }
