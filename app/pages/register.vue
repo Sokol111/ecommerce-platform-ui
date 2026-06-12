@@ -2,7 +2,8 @@
 import { z } from 'zod'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  auth: false
 })
 
 const notify = useNotify()

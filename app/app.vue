@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -11,8 +11,8 @@ useHead({
   }
 })
 
-const title = 'Ecommerce Platform'
-const description = 'Platform for managing tenants and registration.'
+const title = 'Ecommerce Platform Admin'
+const description = 'Admin panel for managing all tenants and stores.'
 
 useSeoMeta({
   title,

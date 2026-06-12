@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt', 'nuxt-oidc-auth'],
 
   devtools: {
     enabled: import.meta.dev
@@ -24,13 +24,15 @@ export default defineNuxtConfig({
 
     // Cookie settings (override with NUXT_COOKIE_SECURE=false for local dev)
     cookieSecure: true,
+    cookieSameSite: 'lax',
 
     // Base domain for building tenant URLs (e.g. ".sokolshop.com")
     baseDomain: ''
   },
 
   routeRules: {
-    '/register': { ssr: true }
+    '/register': { ssr: true },
+    '/login': { ssr: true }
   },
 
   experimental: {
@@ -89,5 +91,62 @@ export default defineNuxtConfig({
 
   icon: {
     serverBundle: 'local'
+  },
+
+  /**
+   * OIDC (nuxt-oidc-auth) — Logto
+   *
+   * Most values are injected at runtime from env vars (see local/production Helm values)
+   */
+  oidc: {
+    providers: {
+      oidc: {
+        clientId: '',
+        clientSecret: 'pkce-unused',
+        redirectUri: '',
+        logoutRedirectUri: '',
+        authorizationUrl: '',
+        tokenUrl: '',
+        userinfoUrl: '',
+        logoutUrl: '',
+        authenticationScheme: 'body',
+        pkce: true,
+        state: true,
+        nonce: false,
+        callbackRedirectUrl: '/dashboard',
+        scope: [
+          'openid', 'profile', 'email',
+          'tenants:read', 'tenants:write'
+        ],
+        responseMode: 'query',
+        tokenRequestType: 'form-urlencoded',
+        additionalAuthParameters: {
+          resource: 'https://api.sokolshop.com'
+        },
+        additionalTokenParameters: {
+          resource: 'https://api.sokolshop.com'
+        },
+        exposeAccessToken: true,
+        validateAccessToken: false,
+        validateIdToken: false,
+        logoutRedirectParameterName: 'post_logout_redirect_uri',
+        additionalLogoutParameters: {
+          idTokenHint: ''
+        }
+      }
+    },
+    session: {
+      expirationCheck: true,
+      expirationThreshold: 30,
+      automaticRefresh: false,
+      cookie: {
+        secure: false,
+        sameSite: 'lax'
+      }
+    },
+    middleware: {
+      globalMiddlewareEnabled: false,
+      customLoginPage: true
+    }
   }
 })
