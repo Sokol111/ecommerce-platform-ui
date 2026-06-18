@@ -42,16 +42,18 @@ async function readValidatedBody(event: H3Event): Promise<RegisterBody> {
 }
 
 async function registerTenant(client: ReturnType<typeof useTenantClient>, body: RegisterBody) {
-  try {
-    const requestBody = {
-      slug: body.slug,
-      name: body.shopName,
-      email: body.email,
-      password: body.password,
-      firstName: body.firstName,
-      lastName: body.lastName
-    }
+  const requestBody = {
+    slug: body.slug,
+    name: body.shopName,
+    email: body.email,
+    password: body.password,
+    firstName: body.firstName,
+    lastName: body.lastName
+  }
 
+  let needsPoll = false
+
+  try {
     const response = await client.registerTenant(requestBody)
 
     // gRPC response: oneof result { Tenant tenant = 1; RegistrationStatusResponse status = 2; }
@@ -62,8 +64,7 @@ async function registerTenant(client: ReturnType<typeof useTenantClient>, body: 
 
     if (response.result.case === 'status') {
       logger.info(`Tenant registration accepted, polling: ${body.slug}`)
-      await pollRegistrationStatus(client, body.slug)
-      return
+      needsPoll = true
     }
   } catch (error: unknown) {
     const err = error as { code?: string | number }
@@ -80,24 +81,39 @@ async function registerTenant(client: ReturnType<typeof useTenantClient>, body: 
       message: 'Failed to create shop. Please try again.'
     })
   }
+
+  if (needsPoll) {
+    await pollRegistrationStatus(client, body.slug)
+  }
 }
 
 async function pollRegistrationStatus(client: ReturnType<typeof useTenantClient>, slug: string) {
   for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt++) {
     await sleep(POLL_INTERVAL_MS)
 
-    const status = await client.getRegistrationStatus(slug)
+    let status: Awaited<ReturnType<typeof client.getRegistrationStatus>>
+    try {
+      status = await client.getRegistrationStatus(slug)
+    } catch (error: unknown) {
+      logger.error(`Failed to poll registration status for: ${slug}`, error)
+      throw createError({
+        statusCode: 500,
+        message: 'Failed to check registration status. Please try again.'
+      })
+    }
 
     switch (status.status) {
       case RegistrationStatus.COMPLETED:
         logger.info(`Tenant registration completed: ${slug}`)
         return
       case RegistrationStatus.ROLLED_BACK:
+        logger.error(`Tenant registration rolled back: ${slug}, reason: ${status.failureReason}`)
         throw createError({
           statusCode: 500,
           message: status.failureReason || 'Registration failed. Please try again.'
         })
       case RegistrationStatus.COMPENSATING:
+        logger.error(`Tenant registration compensating: ${slug}`)
         throw createError({
           statusCode: 500,
           message: 'Registration failed. Please try again.'
@@ -108,6 +124,7 @@ async function pollRegistrationStatus(client: ReturnType<typeof useTenantClient>
     }
   }
 
+  logger.error(`Tenant registration timed out after ${MAX_POLL_ATTEMPTS} attempts: ${slug}`)
   throw createError({
     statusCode: 504,
     message: 'Registration is taking too long. Please try again later.'
