@@ -1,71 +1,65 @@
+import { createClient } from '@connectrpc/connect'
+import { createGrpcTransport } from '@connectrpc/connect-node'
 import type {
-    GetTenantListParams,
-    TenantListResponse,
-    TenantResponse,
-    TenantSlugListResponse,
+    GetEnabledTenantSlugsResponse,
+    GetTenantListResponse,
+    Tenant,
     UpdateTenantRequest
 } from '@sokol111/ecommerce-tenant-service-api'
-import {
-    getDeleteTenantUrl,
-    getGetEnabledTenantSlugsUrl,
-    getGetTenantBySlugUrl,
-    getGetTenantListUrl,
-    getUpdateTenantUrl
-} from '@sokol111/ecommerce-tenant-service-api'
+import { TenantService } from '@sokol111/ecommerce-tenant-service-api'
 import type { H3Event } from 'h3'
 
 export async function useTenantClientUser(event: H3Event) {
-  const { tenantApiUrl: baseURL } = useRuntimeConfig()
+  const { tenantApiUrl: baseUrl } = useRuntimeConfig()
   const token = await useAuthToken(event)
-  const headers: HeadersInit = { Authorization: `Bearer ${token}` }
+
+  const transport = createGrpcTransport({
+    baseUrl,
+    interceptors: [
+      (next) => (req) => {
+        req.header.set('Authorization', `Bearer ${token}`)
+        return next(req)
+      }
+    ]
+  })
+
+  const client = createClient(TenantService, transport)
 
   return {
-    async getTenantList(
-      params?: Partial<GetTenantListParams>
-    ): Promise<TenantListResponse> {
-      return $fetch<TenantListResponse>(getGetTenantListUrl({
+    async getTenantList(params?: {
+      page?: number
+      size?: number
+      sort?: string
+      order?: string
+      enabled?: boolean
+    }): Promise<GetTenantListResponse> {
+      return client.getTenantList({
         page: params?.page ?? 1,
         size: params?.size ?? 10,
         sort: params?.sort,
         order: params?.order,
         enabled: params?.enabled
-      }), {
-        baseURL,
-        headers
       })
     },
 
-    async getTenantBySlug(slug: string): Promise<TenantResponse> {
-      return $fetch<TenantResponse>(getGetTenantBySlugUrl(slug), {
-        baseURL,
-        headers
-      })
+    async getTenantBySlug(slug: string): Promise<Tenant> {
+      const res = await client.getTenantBySlug({ slug })
+      return res.tenant!
     },
 
-    async getEnabledTenantSlugs(): Promise<TenantSlugListResponse> {
-      return $fetch<TenantSlugListResponse>(getGetEnabledTenantSlugsUrl(), {
-        baseURL,
-        headers
-      })
+    async getEnabledTenantSlugs(): Promise<GetEnabledTenantSlugsResponse> {
+      return client.getEnabledTenantSlugs({})
     },
 
-    async updateTenant(body: UpdateTenantRequest): Promise<TenantResponse> {
-      return $fetch<TenantResponse>(getUpdateTenantUrl(), {
-        baseURL,
-        method: 'PUT',
-        headers,
-        body
-      })
+    async updateTenant(req: UpdateTenantRequest): Promise<Tenant> {
+      const res = await client.updateTenant(req)
+      return res.tenant!
     },
 
     async deleteTenant(slug: string): Promise<void> {
-      await $fetch(getDeleteTenantUrl(slug), {
-        baseURL,
-        method: 'DELETE',
-        headers
-      })
+      await client.deleteTenant({ slug })
     }
   }
 }
 
-export type TenantClientUser = ReturnType<typeof useTenantClientUser>
+export type TenantClientUser = Awaited<ReturnType<typeof useTenantClientUser>>

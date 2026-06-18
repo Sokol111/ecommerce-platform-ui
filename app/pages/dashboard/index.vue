@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TenantListResponse } from '@sokol111/ecommerce-tenant-service-api'
+import type { GetTenantListResponse } from '@sokol111/ecommerce-tenant-service-api'
 
 definePageMeta({
   layout: 'default'
@@ -12,7 +12,7 @@ onMounted(() => {
   isMounted.value = true
 })
 
-const { data: stats, pending: statsPending } = await useFetch<TenantListResponse>('/api/tenants', {
+const { data: stats, pending: statsPending } = await useFetch<GetTenantListResponse>('/api/tenants', {
   query: { page: 1, size: 1 },
   server: false,
   getCachedData: () => undefined
@@ -21,13 +21,13 @@ const { data: stats, pending: statsPending } = await useFetch<TenantListResponse
 const cards = computed(() => [
   {
     title: 'Total Tenants',
-    value: stats.value?.total || 0,
+    value: Number(stats.value?.total ?? 0),
     icon: 'i-lucide-building-2',
     color: 'primary' as const
   },
   {
     title: 'Active Tenants',
-    value: stats.value?.total || 0,
+    value: Number(stats.value?.total ?? 0),
     icon: 'i-lucide-check-circle',
     color: 'success' as const
   }

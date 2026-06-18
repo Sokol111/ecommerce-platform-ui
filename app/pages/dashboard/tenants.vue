@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TenantResponse } from '@sokol111/ecommerce-tenant-service-api'
+import type { Tenant } from '@sokol111/ecommerce-tenant-service-api'
 
 definePageMeta({
   layout: 'default'
@@ -15,7 +15,7 @@ const {
   totalPages,
   handlePageChange,
   refresh
-} = await useListPage<TenantResponse>('/api/tenants')
+} = await useListPage<Tenant>('/api/tenants')
 
 const columns = [
   { accessorKey: 'name', header: 'Name' },
@@ -36,7 +36,7 @@ const deleteTarget = ref<{ slug: string, name: string } | null>(null)
 const deleteLoading = ref(false)
 const isDeleteModalOpen = ref(false)
 
-function openDelete(row: TenantResponse) {
+function openDelete(row: Tenant) {
   deleteTarget.value = { slug: row.slug, name: row.name }
   isDeleteModalOpen.value = true
 }
@@ -74,8 +74,10 @@ function cancelDelete() {
   isDeleteModalOpen.value = false
 }
 
-function formatDate(value: string) {
-  return new Date(value).toLocaleDateString('en-US', {
+function formatDate(value: { seconds: bigint | number } | string | null | undefined) {
+  if (!value) return '-'
+  const isoStr = typeof value === 'string' ? value : new Date(Number(value.seconds) * 1000).toISOString()
+  return new Date(isoStr).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric'

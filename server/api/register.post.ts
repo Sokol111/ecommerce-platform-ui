@@ -1,5 +1,4 @@
-import type { RegisterTenantRequest } from '@sokol111/ecommerce-tenant-service-api'
-import { RegistrationStatusResponseStatus } from '@sokol111/ecommerce-tenant-service-api'
+import { RegistrationStatus } from '@sokol111/ecommerce-tenant-service-api'
 import { consola } from 'consola'
 import type { H3Event } from 'h3'
 
@@ -44,7 +43,7 @@ async function readValidatedBody(event: H3Event): Promise<RegisterBody> {
 
 async function registerTenant(client: ReturnType<typeof useTenantClient>, body: RegisterBody) {
   try {
-    const requestBody: RegisterTenantRequest = {
+    const requestBody = {
       slug: body.slug,
       name: body.shopName,
       email: body.email,
@@ -55,19 +54,21 @@ async function registerTenant(client: ReturnType<typeof useTenantClient>, body: 
 
     const response = await client.registerTenant(requestBody)
 
-    if (response.status === 201) {
+    // gRPC response: oneof result { Tenant tenant = 1; RegistrationStatusResponse status = 2; }
+    if (response.result.case === 'tenant') {
       logger.info(`Tenant registered synchronously: ${body.slug}`)
       return
     }
 
-    if (response.status === 202) {
+    if (response.result.case === 'status') {
       logger.info(`Tenant registration accepted, polling: ${body.slug}`)
       await pollRegistrationStatus(client, body.slug)
       return
     }
   } catch (error: unknown) {
-    const err = error as { response?: { status?: number } }
-    if (err.response?.status === 409) {
+    const err = error as { code?: string | number }
+    // ConnectRPC maps gRPC AlreadyExists (6) to code 'already_exists'
+    if (err.code === 'already_exists' || err.code === 6) {
       throw createError({
         statusCode: 409,
         message: 'This shop URL is already taken. Please choose another one.'
@@ -88,20 +89,20 @@ async function pollRegistrationStatus(client: ReturnType<typeof useTenantClient>
     const status = await client.getRegistrationStatus(slug)
 
     switch (status.status) {
-      case RegistrationStatusResponseStatus.completed:
+      case RegistrationStatus.COMPLETED:
         logger.info(`Tenant registration completed: ${slug}`)
         return
-      case RegistrationStatusResponseStatus.rolled_back:
+      case RegistrationStatus.ROLLED_BACK:
         throw createError({
           statusCode: 500,
           message: status.failureReason || 'Registration failed. Please try again.'
         })
-      case RegistrationStatusResponseStatus.compensating:
+      case RegistrationStatus.COMPENSATING:
         throw createError({
           statusCode: 500,
           message: 'Registration failed. Please try again.'
         })
-      case RegistrationStatusResponseStatus.provisioning:
+      case RegistrationStatus.PROVISIONING:
         // Still in progress, continue polling
         break
     }

@@ -1,4 +1,3 @@
-import type { GetTenantListSort } from '@sokol111/ecommerce-tenant-service-api'
 import { consola } from 'consola'
 
 const logger = consola.withTag('api:tenants:list')
@@ -11,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const result = await tenantClient.getTenantList({
       page: query.page ? Number(query.page) : undefined,
       size: query.size ? Number(query.size) : undefined,
-      sort: query.sort as GetTenantListSort | undefined,
+      sort: query.sort as string | undefined,
       order: query.order as 'asc' | 'desc' | undefined,
       enabled:
         query.enabled === 'true'

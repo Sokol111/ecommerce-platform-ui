@@ -10,14 +10,17 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "link:local": "pnpm link ../ecommerce-tenant-service-api/gen/typescript",
-    "unlink:local": "rm -f node_modules/@sokol111/ecommerce-tenant-service-api && pnpm install"
+    "unlink:local": "pnpm install"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.0.0",
+    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect-node": "^2.0.0",
     "@iconify-json/lucide": "^1.2.108",
     "@iconify-json/simple-icons": "^1.2.83",
     "@nuxt/ui": "^4.7.1",
     "@pinia/nuxt": "0.11.3",
-    "@sokol111/ecommerce-tenant-service-api": "^0.1.4",
+    "@sokol111/ecommerce-tenant-service-api": "^0.1.8",
     "@vueuse/nuxt": "14.3.0",
     "date-fns": "^4.2.1",
     "nuxt": "^4.4.6",
@@ -33,5 +36,5 @@
     "vue-tsc": "^3.3.1"
   },
   "packageManager": "pnpm@11.2.2",
-  "version": "1.0.1"
+  "version": "1.0.2"
 }
