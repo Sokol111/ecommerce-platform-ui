@@ -116,7 +116,7 @@ export default defineNuxtConfig({
         callbackRedirectUrl: '/dashboard',
         scope: [
           'openid', 'profile', 'email',
-          'tenants:read', 'tenants:write'
+          'tenants:read', 'tenants:write', 'tenants:delete'
         ],
         responseMode: 'query',
         tokenRequestType: 'form-urlencoded',

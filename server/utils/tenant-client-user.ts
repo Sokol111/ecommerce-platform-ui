@@ -1,10 +1,9 @@
 import { createClient } from '@connectrpc/connect'
 import { createGrpcTransport } from '@connectrpc/connect-node'
 import type {
-    GetEnabledTenantSlugsResponse,
-    GetTenantListResponse,
-    Tenant,
-    UpdateTenantRequest
+  GetEnabledTenantSlugsResponse,
+  Tenant,
+  UpdateTenantRequest
 } from '@sokol111/ecommerce-tenant-service-api'
 import { TenantService } from '@sokol111/ecommerce-tenant-service-api'
 import type { H3Event } from 'h3'
@@ -32,14 +31,15 @@ export async function useTenantClientUser(event: H3Event) {
       sort?: string
       order?: string
       enabled?: boolean
-    }): Promise<GetTenantListResponse> {
-      return client.getTenantList({
+    }) {
+      const res = await client.getTenantList({
         page: params?.page ?? 1,
         size: params?.size ?? 10,
         sort: params?.sort,
         order: params?.order,
         enabled: params?.enabled
       })
+      return res
     },
 
     async getTenantBySlug(slug: string): Promise<Tenant> {
