@@ -1,4 +1,4 @@
-import { RegistrationStatus } from '@sokol111/ecommerce-tenant-service-api'
+import { RegistrationStatus, type GetRegistrationStatusResponse, type RegisterTenantResponse } from '@sokol111/ecommerce-tenant-service-api'
 import { consola } from 'consola'
 import type { H3Event } from 'h3'
 
@@ -54,15 +54,14 @@ async function registerTenant(client: ReturnType<typeof useTenantClient>, body: 
   let needsPoll = false
 
   try {
-    const response = await client.registerTenant(requestBody)
+    const response = await client.registerTenant(requestBody) as RegisterTenantResponse
 
-    // gRPC response: oneof result { Tenant tenant = 1; RegistrationStatusResponse status = 2; }
-    if (response.result.case === 'tenant') {
+    if (response.status === RegistrationStatus.COMPLETED) {
       logger.info(`Tenant registered synchronously: ${body.slug}`)
       return
     }
 
-    if (response.result.case === 'status') {
+    if (response.status === RegistrationStatus.PROVISIONING) {
       logger.info(`Tenant registration accepted, polling: ${body.slug}`)
       needsPoll = true
     }
@@ -91,9 +90,9 @@ async function pollRegistrationStatus(client: ReturnType<typeof useTenantClient>
   for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt++) {
     await sleep(POLL_INTERVAL_MS)
 
-    let status: Awaited<ReturnType<typeof client.getRegistrationStatus>>
+    let status: GetRegistrationStatusResponse
     try {
-      status = await client.getRegistrationStatus(slug)
+      status = await client.getRegistrationStatus(slug) as GetRegistrationStatusResponse
     } catch (error: unknown) {
       logger.error(`Failed to poll registration status for: ${slug}`, error)
       throw createError({

@@ -1,6 +1,6 @@
 import { createClient } from '@connectrpc/connect'
 import { createGrpcTransport } from '@connectrpc/connect-node'
-import { TenantService } from '@sokol111/ecommerce-tenant-service-api'
+import { TenantService, type GetRegistrationStatusResponse, type RegisterTenantResponse, type Tenant } from '@sokol111/ecommerce-tenant-service-api'
 
 export function useTenantClient() {
   const { tenantApiUrl: baseUrl } = useRuntimeConfig()
@@ -16,10 +16,10 @@ export function useTenantClient() {
   })
 
   return {
-    async createTenant(slug: string, name: string) {
+    async createTenant(slug: string, name: string): Promise<Tenant> {
       const token = await getS2SToken()
       const client = createClient(TenantService, makeTransport(token))
-      const res = await client.createTenant({ slug, name })
+      const res = await client.createTenant({ slug, name }) as unknown as { tenant: Tenant }
       return res.tenant!
     },
 
@@ -30,16 +30,16 @@ export function useTenantClient() {
       password: string
       firstName: string
       lastName: string
-    }) {
+    }): Promise<RegisterTenantResponse> {
       const token = await getS2SToken()
       const client = createClient(TenantService, makeTransport(token))
-      return client.registerTenant(body)
+      return client.registerTenant(body) as unknown as Promise<RegisterTenantResponse>
     },
 
-    async getRegistrationStatus(slug: string) {
+    async getRegistrationStatus(slug: string): Promise<GetRegistrationStatusResponse> {
       const token = await getS2SToken()
       const client = createClient(TenantService, makeTransport(token))
-      return client.getRegistrationStatus({ slug })
+      return client.getRegistrationStatus({ slug }) as unknown as Promise<GetRegistrationStatusResponse>
     }
   }
 }
