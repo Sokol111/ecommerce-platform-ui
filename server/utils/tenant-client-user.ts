@@ -43,16 +43,16 @@ export async function useTenantClientUser(event: H3Event) {
     },
 
     async getTenantBySlug(slug: string): Promise<Tenant> {
-      const res = await client.getTenantBySlug({ slug })
+      const res = await client.getTenantBySlug({ slug }) as unknown as { tenant: Tenant }
       return res.tenant!
     },
 
     async getEnabledTenantSlugs(): Promise<GetEnabledTenantSlugsResponse> {
-      return client.getEnabledTenantSlugs({})
+      return client.getEnabledTenantSlugs({}) as unknown as Promise<GetEnabledTenantSlugsResponse>
     },
 
     async updateTenant(req: UpdateTenantRequest): Promise<Tenant> {
-      const res = await client.updateTenant(req)
+      const res = await client.updateTenant(req) as unknown as { tenant: Tenant }
       return res.tenant!
     },
 
