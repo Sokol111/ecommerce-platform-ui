@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "link:local": "pnpm link ../ecommerce-tenant-service-api/gen/typescript",
-    "unlink:local": "pnpm install"
+    "unlink:local": "pnpm unlink && pnpm install"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.0.0",
