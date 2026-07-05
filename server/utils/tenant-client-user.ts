@@ -5,7 +5,7 @@ import type {
   Tenant,
   UpdateTenantRequest
 } from '@sokol111/ecommerce-tenant-service-api'
-import { TenantService } from '@sokol111/ecommerce-tenant-service-api'
+import { SortOrder, TenantService } from '@sokol111/ecommerce-tenant-service-api'
 import type { H3Event } from 'h3'
 
 export async function useTenantClientUser(event: H3Event) {
@@ -32,11 +32,12 @@ export async function useTenantClientUser(event: H3Event) {
       order?: string
       enabled?: boolean
     }) {
+      const order = params?.order?.toUpperCase()
       const res = await client.getTenantList({
         page: params?.page ?? 1,
         size: params?.size ?? 10,
         sort: params?.sort,
-        order: params?.order,
+        order: order ? SortOrder[order as keyof typeof SortOrder] : undefined,
         enabled: params?.enabled
       })
       return res

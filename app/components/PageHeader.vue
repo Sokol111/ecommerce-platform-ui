@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BreadcrumbItem } from './Breadcrumbs.vue';
+import type { BreadcrumbItem } from './Breadcrumbs.vue'
 
 defineProps<{
   title: string

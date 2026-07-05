@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FetchError } from 'ofetch';
+import type { FetchError } from 'ofetch'
 
 defineProps<{
   title: string
