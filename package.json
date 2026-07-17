@@ -6,6 +6,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "preview": "nuxt preview",
+    "test": "vitest run",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
@@ -23,8 +24,9 @@
     "@sokol111/ecommerce-tenant-service-api": "0.2.4",
     "@vueuse/nuxt": "14.3.0",
     "date-fns": "^4.2.1",
+    "jose": "^6.2.3",
     "nuxt": "^4.4.6",
-    "nuxt-oidc-auth": "1.0.0-beta.11",
+    "nuxt-auth-utils": "^0.5.0",
     "tailwindcss": "^4.3.0",
     "zod": "^4.4.3"
   },
@@ -33,6 +35,7 @@
     "@types/node": "^25.9.1",
     "eslint": "^10.4.0",
     "typescript": "^6.0.3",
+    "vitest": "^4.1.10",
     "vue-tsc": "^3.3.1"
   },
   "packageManager": "pnpm@11.2.2",

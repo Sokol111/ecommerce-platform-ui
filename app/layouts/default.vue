@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { user, logout, isLoading, isAuthenticated } = useAuth()
+const { user, logout, isAuthenticated } = useAuth()
 
 const navigation = [
   {
@@ -87,7 +87,7 @@ const userMenuItems = computed(() => [
           </ClientOnly>
 
           <UDropdownMenu
-            v-if="isAuthenticated && !isLoading"
+            v-if="isAuthenticated"
             :items="userMenuItems"
           >
             <UButton

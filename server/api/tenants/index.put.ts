@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
     const result = await tenantClient.updateTenant(body)
     return { success: true, data: result }
   } catch (error: unknown) {
+    await rethrowConnectAuthError(event, error)
     const err = error as {
       response?: {
         status?: number

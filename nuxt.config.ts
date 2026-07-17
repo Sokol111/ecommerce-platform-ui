@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt', 'nuxt-oidc-auth'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt', 'nuxt-auth-utils'],
 
   devtools: {
     enabled: import.meta.dev
@@ -20,11 +19,27 @@ export default defineNuxtConfig({
     logtoUrl: '',
     logtoClientId: '',
     logtoClientSecret: '',
-    apiResourceIndicator: '',
-
-    // Cookie settings (override with NUXT_COOKIE_SECURE=false for local dev)
-    cookieSecure: true,
-    cookieSameSite: 'lax',
+    oidcLogoutUrl: '',
+    oidcRevocationUrl: '',
+    oidcLogoutRedirectUrl: '',
+    oidcIssuer: '',
+    oidcJwksUrl: '',
+    apiResourceIndicator: 'https://api.sokolshop.com',
+    oauth: {
+      oidc: {
+        openidConfig: {
+          authorization_endpoint: '',
+          token_endpoint: ''
+        }
+      }
+    },
+    session: {
+      maxAge: 60 * 60 * 8,
+      cookie: {
+        secure: true,
+        sameSite: 'lax'
+      }
+    },
 
     // Base domain for building tenant URLs (e.g. ".sokolshop.com")
     baseDomain: ''
@@ -73,6 +88,10 @@ export default defineNuxtConfig({
     }
   },
 
+  auth: {
+    loadStrategy: 'server-first'
+  },
+
   eslint: {
     config: {
       stylistic: {
@@ -91,62 +110,5 @@ export default defineNuxtConfig({
 
   icon: {
     serverBundle: 'local'
-  },
-
-  /**
-   * OIDC (nuxt-oidc-auth) — Logto
-   *
-   * Most values are injected at runtime from env vars (see local/production Helm values)
-   */
-  oidc: {
-    providers: {
-      oidc: {
-        clientId: '',
-        clientSecret: 'pkce-unused',
-        redirectUri: '',
-        logoutRedirectUri: '',
-        authorizationUrl: '',
-        tokenUrl: '',
-        userinfoUrl: '',
-        logoutUrl: '',
-        authenticationScheme: 'body',
-        pkce: true,
-        state: true,
-        nonce: false,
-        callbackRedirectUrl: '/dashboard',
-        scope: [
-          'openid', 'profile', 'email',
-          'tenants:read', 'tenants:write', 'tenants:delete'
-        ],
-        responseMode: 'query',
-        tokenRequestType: 'form-urlencoded',
-        additionalAuthParameters: {
-          resource: 'https://api.sokolshop.com'
-        },
-        additionalTokenParameters: {
-          resource: 'https://api.sokolshop.com'
-        },
-        exposeAccessToken: true,
-        validateAccessToken: false,
-        validateIdToken: false,
-        logoutRedirectParameterName: 'post_logout_redirect_uri',
-        additionalLogoutParameters: {
-          idTokenHint: ''
-        }
-      }
-    },
-    session: {
-      expirationCheck: true,
-      expirationThreshold: 30,
-      automaticRefresh: false,
-      cookie: {
-        secure: false,
-        sameSite: 'lax'
-      }
-    },
-    middleware: {
-      globalMiddlewareEnabled: false,
-      customLoginPage: true
-    }
   }
 })

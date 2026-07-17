@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
     await tenantClient.deleteTenant(slug)
     return { success: true }
   } catch (error: unknown) {
+    await rethrowConnectAuthError(event, error)
     const err = error as {
       response?: {
         status?: number

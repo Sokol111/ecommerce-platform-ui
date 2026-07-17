@@ -1,13 +1,13 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (to.path.startsWith('/api/')) {
-    return
-  }
-
   if (to.meta.auth === false) {
     return
   }
 
-  const { loggedIn } = useOidcAuth()
+  const { loggedIn, ready, fetch } = useUserSession()
+
+  if (!ready.value) {
+    await fetch()
+  }
 
   if (!loggedIn.value) {
     return navigateTo('/login')

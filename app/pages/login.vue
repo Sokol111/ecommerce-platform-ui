@@ -5,6 +5,13 @@ definePageMeta({
 })
 
 const { login } = useAuth()
+const route = useRoute()
+
+const errorMessage = computed(() => {
+  if (route.query.error === 'platform_access_required') return 'Your account does not have access to this platform admin panel.'
+  if (route.query.error === 'oidc_auth_failed') return 'Sign in failed. Please try again.'
+  return null
+})
 </script>
 
 <template>
@@ -19,6 +26,14 @@ const { login } = useAuth()
         </p>
       </div>
     </template>
+
+    <UAlert
+      v-if="errorMessage"
+      class="mb-4"
+      color="error"
+      icon="i-lucide-circle-alert"
+      :description="errorMessage"
+    />
 
     <UButton
       block
