@@ -17,6 +17,12 @@ pnpm unlink:local        # restore the packaged API dependency
 Do not edit `.nuxt/` or `.output/`. Keep real values in ignored `.env`; only non-secret defaults
 belong in `.env.example`.
 
+`pnpm link:local` and `pnpm unlink:local` are only for running the UI directly on the host. When
+using `make dev` from `ecommerce-infrastructure/environments/local`, Tilt builds the local Nuxt
+image with `Dockerfile.nuxt`: it copies and builds each configured API's `gen/typescript`, removes
+the packaged `@sokol111/*` dependencies, and links those local packages inside the container. Do
+not run the link commands for that workflow.
+
 ## Structure and Boundaries
 
 - `app/` contains pages, components, composables, and client UI.
