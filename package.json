@@ -14,30 +14,30 @@
     "unlink:local": "pnpm unlink && pnpm install"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.0.0",
-    "@connectrpc/connect": "^2.0.0",
-    "@connectrpc/connect-node": "^2.0.0",
-    "@iconify-json/lucide": "^1.2.108",
-    "@iconify-json/simple-icons": "^1.2.83",
-    "@nuxt/ui": "^4.7.1",
+    "@bufbuild/protobuf": "^2.13.0",
+    "@connectrpc/connect": "^2.1.2",
+    "@connectrpc/connect-node": "^2.1.2",
+    "@iconify-json/lucide": "^1.2.121",
+    "@iconify-json/simple-icons": "^1.2.93",
+    "@nuxt/ui": "^4.10.0",
     "@pinia/nuxt": "0.11.3",
     "@sokol111/ecommerce-tenant-service-api": "0.2.4",
-    "@vueuse/nuxt": "14.3.0",
-    "date-fns": "^4.2.1",
-    "jose": "^6.2.3",
-    "nuxt": "^4.4.6",
-    "nuxt-auth-utils": "^0.5.0",
-    "tailwindcss": "^4.3.0",
+    "@vueuse/nuxt": "14.4.0",
+    "date-fns": "^4.4.0",
+    "jose": "^6.2.8",
+    "nuxt": "^4.5.1",
+    "nuxt-auth-utils": "^0.5.29",
+    "tailwindcss": "^4.3.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.15.2",
-    "@types/node": "^25.9.1",
-    "eslint": "^10.4.0",
+    "@nuxt/eslint": "^1.16.0",
+    "@types/node": "^25.9.5",
+    "eslint": "^10.8.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10",
-    "vue-tsc": "^3.3.1"
+    "vue-tsc": "^3.3.9"
   },
   "packageManager": "pnpm@11.2.2",
-  "version": "1.0.2"
+  "version": "1.0.3"
 }
