@@ -120,7 +120,7 @@ async function onSubmit() {
           @input="onSlugInput"
         >
           <template #trailing>
-            <span class="text-muted text-xs">.example.com</span>
+            <span class="text-muted text-xs">.sokolshop.com</span>
           </template>
         </UInput>
       </UFormField>
