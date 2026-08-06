@@ -50,7 +50,7 @@ useSeoMeta({
               label="Create a store"
             />
             <UButton
-              to="/login"
+              to="https://admin.sokolshop.com/"
               size="xl"
               color="neutral"
               variant="outline"

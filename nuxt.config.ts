@@ -47,7 +47,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/register': { ssr: true },
-    '/login': { ssr: true }
+    '/dashboard/login': { ssr: true }
   },
 
   experimental: {

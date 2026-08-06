@@ -6,7 +6,7 @@ export default defineNuxtPlugin(() => {
     onResponseError({ response }) {
       if (import.meta.client && response.status === 401 && !redirecting) {
         redirecting = true
-        void reloadNuxtApp({ path: '/login' })
+        void reloadNuxtApp({ path: '/dashboard/login' })
       }
     }
   })

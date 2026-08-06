@@ -17,7 +17,7 @@ export default defineEventHandler((event) => {
         ])
         if (!hasPlatformAccess(access)) {
           await clearAuthSession(event)
-          return sendRedirect(event, '/login?error=platform_access_required')
+          return sendRedirect(event, '/dashboard/login?error=platform_access_required')
         }
 
         await replaceUserSession(event, {
@@ -39,12 +39,12 @@ export default defineEventHandler((event) => {
       } catch (error) {
         console.error('OIDC token validation failed', error)
         await clearAuthSession(event)
-        return sendRedirect(event, '/login?error=oidc_auth_failed')
+        return sendRedirect(event, '/dashboard/login?error=oidc_auth_failed')
       }
     },
     onError(event, error) {
       console.error('OIDC login failed', error)
-      return sendRedirect(event, '/login?error=oidc_auth_failed')
+      return sendRedirect(event, '/dashboard/login?error=oidc_auth_failed')
     }
   })(event)
 })
