@@ -33,7 +33,7 @@ useSeoMeta({
       <section class="grid items-center gap-14 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:py-28">
         <div>
           <p class="mb-5 text-sm font-semibold tracking-[0.2em] text-emerald-300 uppercase">
-            Open-source e-commerce platform
+            E-commerce platform portfolio
           </p>
           <h1 class="max-w-3xl text-5xl font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl">
             A commerce platform built as an engineering portfolio.
@@ -120,10 +120,10 @@ useSeoMeta({
               class="mb-4 size-6 text-emerald-300"
             />
             <h2 class="font-semibold">
-              More than a mockup
+              Event-driven services
             </h2>
             <p class="mt-2 leading-7 text-slate-400">
-              The project demonstrates a working separation of domains, services, and interfaces.
+              The catalogue publishes changes as events, while dedicated query services build fast storefront read models.
             </p>
           </div>
           <div>
@@ -144,10 +144,10 @@ useSeoMeta({
               class="mb-4 size-6 text-emerald-300"
             />
             <h2 class="font-semibold">
-              Open source
+              Project workspace
             </h2>
             <p class="mt-2 leading-7 text-slate-400">
-              The architecture, infrastructure, and services are available to explore in the GitHub workspace.
+              Explore the platform architecture, infrastructure, and services in the GitHub workspace.
             </p>
           </div>
         </div>
