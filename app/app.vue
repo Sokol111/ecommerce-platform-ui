@@ -11,8 +11,8 @@ useHead({
   }
 })
 
-const title = 'Ecommerce Platform Admin'
-const description = 'Admin panel for managing all tenants and stores.'
+const title = 'SokolShop - e-commerce platform portfolio'
+const description = 'SokolShop e-commerce platform portfolio: microservices, multi-tenancy, and modern tooling for online stores.'
 
 useSeoMeta({
   title,
