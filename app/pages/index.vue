@@ -57,23 +57,6 @@ useSeoMeta({
               label="Open admin console"
             />
           </div>
-
-          <a
-            href="https://github.com/Sokol111/ecommerce-workspace"
-            target="_blank"
-            rel="noreferrer"
-            class="mt-7 inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition hover:text-emerald-300"
-          >
-            <UIcon
-              name="i-lucide-github"
-              class="size-4"
-            />
-            View the workspace on GitHub
-            <UIcon
-              name="i-lucide-arrow-up-right"
-              class="size-4"
-            />
-          </a>
         </div>
 
         <div class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-2xl shadow-black/30 backdrop-blur sm:p-8">
@@ -102,10 +85,10 @@ useSeoMeta({
             </div>
             <div>
               <dt class="text-sm text-emerald-300">
-                03. Modern architecture
+                03. Event-driven CQRS
               </dt>
               <dd class="mt-1 text-slate-300">
-                Go microservices, Kafka events, MongoDB read models, and Nuxt interfaces.
+                Go microservices publish Kafka events, while dedicated services maintain MongoDB read models.
               </dd>
             </div>
           </dl>
@@ -113,31 +96,10 @@ useSeoMeta({
       </section>
 
       <section class="border-t border-white/10 py-12">
-        <div class="grid gap-8 md:grid-cols-3">
-          <div>
-            <UIcon
-              name="i-lucide-layers-3"
-              class="mb-4 size-6 text-emerald-300"
-            />
-            <h2 class="font-semibold">
-              Event-driven services
-            </h2>
-            <p class="mt-2 leading-7 text-slate-400">
-              The catalogue publishes changes as events, while dedicated query services build fast storefront read models.
-            </p>
-          </div>
-          <div>
-            <UIcon
-              name="i-lucide-building-2"
-              class="mb-4 size-6 text-emerald-300"
-            />
-            <h2 class="font-semibold">
-              Multi-tenancy
-            </h2>
-            <p class="mt-2 leading-7 text-slate-400">
-              Stores have separate data and administration while running on a shared platform.
-            </p>
-          </div>
+        <h2 class="text-sm font-semibold tracking-[0.2em] text-emerald-300 uppercase">
+          Project resources
+        </h2>
+        <div class="mt-6 grid gap-8 md:grid-cols-2">
           <div>
             <UIcon
               name="i-lucide-code-2"
@@ -147,7 +109,38 @@ useSeoMeta({
               Project workspace
             </h2>
             <p class="mt-2 leading-7 text-slate-400">
-              Explore the platform architecture, infrastructure, and services in the GitHub workspace.
+              Explore the platform architecture, infrastructure, and services in the
+              <a
+                href="https://github.com/Sokol111/ecommerce-workspace"
+                target="_blank"
+                rel="noreferrer"
+                class="font-medium text-emerald-300 transition hover:text-emerald-200"
+              >GitHub workspace</a>.
+            </p>
+          </div>
+          <div>
+            <UIcon
+              name="i-lucide-chart-no-axes-combined"
+              class="mb-4 size-6 text-emerald-300"
+            />
+            <h2 class="font-semibold">
+              Observability
+            </h2>
+            <p class="mt-2 leading-7 text-slate-400">
+              Explore production telemetry in the
+              <a
+                href="https://igorsokol111.grafana.net/public-dashboards/366a6c8c2538479d908854fe502eec89"
+                target="_blank"
+                rel="noreferrer"
+                class="font-medium text-emerald-300 transition hover:text-emerald-200"
+              >operations dashboard</a>
+              and
+              <a
+                href="https://igorsokol111.grafana.net/public-dashboards/2a942a97734e4ac3b2599e907a7fc26c"
+                target="_blank"
+                rel="noreferrer"
+                class="font-medium text-emerald-300 transition hover:text-emerald-200"
+              >service dashboard</a>.
             </p>
           </div>
         </div>
