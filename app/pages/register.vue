@@ -196,7 +196,10 @@ async function onSubmit() {
     <template #footer>
       <p class="text-center text-sm text-muted">
         Already have a shop?
-        <span class="text-primary font-medium">Sign in from your admin panel</span>
+        <a
+          href="https://admin.sokolshop.com/"
+          class="text-primary font-medium hover:underline"
+        >Sign in from your admin panel</a>
       </p>
     </template>
   </UCard>
