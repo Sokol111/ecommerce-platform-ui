@@ -15,7 +15,7 @@ useSeoMeta({
     <div class="pointer-events-none absolute inset-x-0 top-0 h-[38rem] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-500/20 via-slate-950 to-slate-950" />
 
     <div class="relative mx-auto max-w-6xl px-6 py-6 sm:px-10 lg:px-12">
-      <header class="flex items-center justify-between gap-4">
+      <header>
         <NuxtLink
           to="/"
           class="flex items-center gap-3 font-semibold tracking-tight"
@@ -28,13 +28,6 @@ useSeoMeta({
           </span>
           <span>SokolShop</span>
         </NuxtLink>
-
-        <UButton
-          to="/login"
-          color="neutral"
-          variant="ghost"
-          label="Sign in"
-        />
       </header>
 
       <section class="grid items-center gap-14 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:py-28">
@@ -66,7 +59,7 @@ useSeoMeta({
           </div>
 
           <a
-            href="https://github.com/Sokol111/ecommerce"
+            href="https://github.com/Sokol111/ecommerce-workspace"
             target="_blank"
             rel="noreferrer"
             class="mt-7 inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition hover:text-emerald-300"
