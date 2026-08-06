@@ -136,7 +136,7 @@ useSeoMeta({
               >operations dashboard</a>
               and
               <a
-                href="https://igorsokol111.grafana.net/public-dashboards/2a942a97734e4ac3b2599e907a7fc26c"
+                href="https://igorsokol111.grafana.net/public-dashboards/1cc5e8d3f3c54a9a8466f0666734fcc1"
                 target="_blank"
                 rel="noreferrer"
                 class="font-medium text-emerald-300 transition hover:text-emerald-200"
